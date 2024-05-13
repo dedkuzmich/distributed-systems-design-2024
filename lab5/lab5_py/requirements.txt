@@ -1,0 +1,5 @@
+flask
+requests
+hazelcast-python-client
+psutil
+python-consul
