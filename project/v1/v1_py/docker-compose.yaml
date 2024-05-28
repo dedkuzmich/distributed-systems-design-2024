@@ -1,0 +1,55 @@
+version: "3"
+
+services:
+  master:
+    build:
+      context: ./master
+      dockerfile: master.Dockerfile
+    volumes:
+      - master_data:/app/data
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - PYTHONUNBUFFERED=1
+      - SECONDARY_URLS=http://secondary1:5001,http://secondary2:5002
+    networks:
+      - project_net
+
+  secondary1:
+    build:
+      context: ./secondary
+      dockerfile: secondary.Dockerfile
+    volumes:
+      - secondary1_data:/app/data
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - PYTHONUNBUFFERED=1
+    networks:
+      - project_net
+
+  secondary2:
+    build:
+      context: ./secondary
+      dockerfile: secondary.Dockerfile
+    volumes:
+      - secondary2_data:/app/data
+    ports:
+      - "5002:5002"
+    environment:
+      - PORT=5002
+      - PYTHONUNBUFFERED=1
+    networks:
+      - project_net
+
+networks:
+  project_net:
+    driver: bridge
+
+volumes:
+  master_data:
+  secondary1_data:
+  secondary2_data:
+
